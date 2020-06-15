@@ -1,4 +1,4 @@
-
+package proz.docker2.serv;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
@@ -19,6 +19,7 @@ import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.WebTarget;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 //import com.google.gson.Gson;
@@ -43,7 +44,7 @@ public class ServerMain {
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public String crunchifyREST(InputStream incomingData) {
+	public String crunchifyREST(InputStream incomingData) throws JSONException {
 		StringBuilder crunchifyBuilder = new StringBuilder();
 		try {
 			BufferedReader in = new BufferedReader(new InputStreamReader(incomingData));
