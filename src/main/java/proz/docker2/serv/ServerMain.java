@@ -35,39 +35,35 @@ import org.json.JSONObject;
 @Path("hello")
 public class ServerMain {
 	
-	Client client = ClientBuilder.newClient(); 
-	String exp = "2*3";
-	URI uri = URI.create("http://api.mathjs.org/v4/" + "?expr=" + exp); 	
-	WebTarget webTarget = client.target(uri);
-	String plainAnswer = webTarget.request().accept(MediaType.TEXT_PLAIN).get(String.class);
+	Client client = ClientBuilder.newClient();  		
 	
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public String crunchifyREST(InputStream incomingData) throws JSONException {
-		StringBuilder crunchifyBuilder = new StringBuilder();
+	public String actionServer(InputStream incomingData) throws JSONException {
+		
+		StringBuilder sb = new StringBuilder();
 		try {
 			BufferedReader in = new BufferedReader(new InputStreamReader(incomingData));
 			String line = null;
 			while ((line = in.readLine()) != null) {
-				crunchifyBuilder.append(line);
+				sb.append(line);
 			}
 		} catch (Exception e) {
 			System.out.println("Error Parsing: - ");
 		}
-		String dae = crunchifyBuilder.toString();
-		System.out.println("Data1 Received: " + crunchifyBuilder.toString()+ "\n");
-		//JSONObject obj2 = new JSONObject(dae);
-		//System.out.println(obj2);
-		dae = dae.substring(9, dae.length()-2);
-		System.out.println(dae);
-		// return HTTP response 200 in case of success
-		dae = dae.replace("/", "%2F");
-		dae = dae.replace("+", "%2B");
-		uri = URI.create("http://api.mathjs.org/v4/"+"?expr="+dae);
+		
+		
+		String string = sb.toString();
+		JSONObject obj3 = new JSONObject(string);
+		string = obj3.getString("result");
+		string = string.replace("/", "%2F");
+		string = string.replace("+", "%2B");
+		URI uri = URI.create("http://api.mathjs.org/v4/"+"?expr="+string);
+		
 		WebTarget webTarget = client.target(uri);
 		String plainAnswerw = webTarget.request().accept(MediaType.TEXT_PLAIN).get(String.class);
-		System.out.println(plainAnswerw);
+
 		JSONObject obj2 = new JSONObject();
 		obj2.put("result", plainAnswerw);
 		System.out.println(obj2);
